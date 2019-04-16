@@ -1,10 +1,16 @@
 package yeeet.com;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,10 +25,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static yeeet.com.SettingsActivity.SHARED_PREFS;
+import static yeeet.com.SettingsActivity.SWITCH1;
+
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnItemClickListener {
     public static final String EXTRA_URL = "imageURL";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_MINUTES = "ready";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
@@ -42,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
 
         mRequestQueue = Volley.newRequestQueue(this);
         parseJSON();
+        settings();
     }
 
     private void parseJSON(){
@@ -90,5 +101,31 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
         detailIntent.putExtra(EXTRA_MINUTES, clickedItem.getMinutes());
 
         startActivity(detailIntent);
+    }
+
+    public void sendMessage(View view)
+    {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void settings(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        boolean switch1 = sharedPreferences.getBoolean(SWITCH1, false);
+
+        if(switch1){
+            RecyclerView main = findViewById(R.id.recycler_view);
+
+            main.setBackgroundColor(Color.BLUE);
+//            TextView textView = findViewById(R.id.textView);
+//            textView.setTextColor(Color.WHITE);
+            Log.d("blackmode", "zwart");
+        } else {
+            RecyclerView main = findViewById(R.id.recycler_view);
+            main.setBackgroundColor(Color.WHITE);
+//            TextView textView = findViewById(R.id.textView);
+//            textView.setTextColor(Color.BLACK);
+            Log.d("blackmode", "wit");
+        }
     }
 }
