@@ -29,10 +29,10 @@ import static yeeet.com.SettingsActivity.SHARED_PREFS;
 import static yeeet.com.SettingsActivity.SWITCH1;
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnItemClickListener {
+    // Constanten verwijzen naar af te handelde van data
     public static final String EXTRA_URL = "imageURL";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_MINUTES = "ready";
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
@@ -48,13 +48,15 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // creeer niewe arraylist
         mRecipeList = new ArrayList<>();
 
+        // voer Volley request uit en voer ParseJSON en settings uit
         mRequestQueue = Volley.newRequestQueue(this);
         parseJSON();
         settings();
     }
-
+// ParseJSON Haalt data van internet af en plaatst deze in variablen
     private void parseJSON(){
         String url = "https://pixabay.com/api/?key=5303976-fd6581ad4ac165d1b75cc15b3&q=dog&image_type=photo&pretty=true";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -77,11 +79,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
                             mRecyclerView.setAdapter(mRecipeAdapter);
                             mRecipeAdapter.setOnItemClickListener(MainActivity.this);
 
+                            // Als geen informatie gevonden kan worden catch error en print waarden van de error
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
 
         mRequestQueue.add(request);
     }
-
+// verstuur json data naar DetailActivity
     @Override
     public void onItemClick(int position) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
-
+// veranderd achtergrond kleur naar blauw
     public void settings(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         boolean switch1 = sharedPreferences.getBoolean(SWITCH1, false);
@@ -117,14 +121,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.OnI
             RecyclerView main = findViewById(R.id.recycler_view);
 
             main.setBackgroundColor(Color.BLUE);
-//            TextView textView = findViewById(R.id.textView);
-//            textView.setTextColor(Color.WHITE);
             Log.d("blackmode", "zwart");
         } else {
             RecyclerView main = findViewById(R.id.recycler_view);
             main.setBackgroundColor(Color.WHITE);
-//            TextView textView = findViewById(R.id.textView);
-//            textView.setTextColor(Color.BLACK);
             Log.d("blackmode", "wit");
         }
     }
