@@ -47,7 +47,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         int minutes = currentRecipe.getMinutes();
 
         recipeViewHolder.mTextViewTitle.setText(recipeTitle);;
-        recipeViewHolder.mTextViewReady.setText("Ready in: " + minutes + "minutes");
+        recipeViewHolder.mTextViewReady.setText("Likes: " + minutes );
         Picasso.with(mContext).load(imageUrl).fit().centerInside().into(recipeViewHolder.mImageView);
     }
 
